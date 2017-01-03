@@ -3,7 +3,7 @@
     public enum AfterActionBehaviourEnum
     {
         RunAgain,
-        RunAgainAfterDelay,
-        StopEnsuring
+        StopEnsuring,
+        StopExecuting
     }
 }

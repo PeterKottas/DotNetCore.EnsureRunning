@@ -12,5 +12,17 @@ namespace PeterKottas.DotNetCore.EnsureRunning.Interfaces
         IEnsuredAction Once();
 
         IEnsuredAction Times(int n);
+
+        IEnsuredAction WithOnException(Func<Exception, ActionState, AfterActionConfig> onException);
+
+        IEnsuredAction WithExceptionInOnExceptionBehaviour(AfterActionConfig onExceptionExceptionBehaviour);
+
+        IEnsuredAction WithBetweenActionDelay(int betweenActionIntervalMs);
+
+        IEnsuredAction WithStorageCheckInterval(int storageCheckIntervalMs);
+
+        IEnsuredAction WithHeartBeatInterval(int heartBeatIntervalMs);
+
+        IEnsuredAction WithHeartBeatTimeout(int heartBeatTimeoutMs);
     }
 }

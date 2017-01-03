@@ -17,7 +17,7 @@ namespace PeterKottas.DotNetCore.EnsureRunning.Configuration
 
         public void UseStorage(IStorage storage)
         {
-            if(config==null)
+            if (config == null)
             {
                 throw new ArgumentException("Parameter passed to UseStorage method was null");
             }

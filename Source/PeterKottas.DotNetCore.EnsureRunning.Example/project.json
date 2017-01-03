@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "buildOptions": {
     "emitEntryPoint": true
@@ -7,11 +7,17 @@
     "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {
-          "type": "platform",
           "version": "1.1.0"
         }
       },
       "imports": "dnxcore50"
     }
+  },
+  "dependencies": {
+    "PeterKottas.DotNetCore.EnsureRunning": "1.0.0-*",
+    "PeterKottas.DotNetCore.EnsureRunning.SqlServer": "1.0.0-*"
+  },
+  "runtimes": {
+    "win81-x64": ""
   }
 }

@@ -1,10 +1,20 @@
-﻿{
+{
   "version": "1.0.0-*",
-
-  "dependencies": {
-    "NETStandard.Library": "1.6.0"
+  "buildOptions": {
+    "copyToOutput": [ "install.sql", "uninstall.sql" ]
   },
-
+  "dependencies": {
+    "Dapper": "1.50.2",
+    "NETStandard.Library": "1.6.1",
+    "PeterKottas.DotNetCore.EnsureRunning": "1.0.0-*",
+    "System.Diagnostics.Process": "4.3.0"
+  },
+  "publishOptions": {
+    "include": [
+      "install.sql",
+      "uninstall.sql"
+    ]
+  },
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50"

@@ -11,13 +11,13 @@ namespace PeterKottas.DotNetCore.EnsureRunning
     {
         private static EnsureRunningConfig config = new EnsureRunningConfig();
 
-        public static IEnsuredAction Action(string actionId, Func<ActionState, AfterActionConfig> action, ActionConfig actionConfig = null)
+        public static IEnsuredAction Action(string actionId, Func<ActionState, AfterActionConfig> action)
         {
-            if (config.IsConfigured)
+            if (!config.IsConfigured)
             {
                 throw new ArgumentException("EnsureRunning requires configuring first to work");
             }
-            if (config.IsStorageConfigured)
+            if (!config.IsStorageConfigured)
             {
                 throw new ArgumentException("EnsureRunning requires storage to be configured");
             }
@@ -28,14 +28,9 @@ namespace PeterKottas.DotNetCore.EnsureRunning
             var ensuredActionConfig = new EnsuredActionConfig()
             {
                 Action = action,
-                ActionId = actionId
+                ActionId = actionId,
+                Storage = config.Storage
             };
-            if (actionConfig != null)
-            {
-                actionConfig = new ActionConfig();
-            }
-            ensuredActionConfig.OnException = actionConfig.OnException;
-            ensuredActionConfig.OnExceptionExceptionBehaviour = actionConfig.OnExceptionExceptionBehvaiour;
             return new EnsuredAction(ensuredActionConfig);
         }
 
