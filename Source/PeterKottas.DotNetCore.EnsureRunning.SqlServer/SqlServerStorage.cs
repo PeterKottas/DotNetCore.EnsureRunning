@@ -2,17 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DTOs;
 using System.Data.SqlClient;
 using System.Data;
 using Dapper;
 using PeterKottas.DotNetCore.EnsureRunning.SqlServer.DTO;
-using Enum;
-using System.Diagnostics;
-using PeterKottas.DotNetCore.EnsureRunning.DTOs;
+using PeterKottas.DotNetCore.EnsureRunning.DTO;
 using PeterKottas.DotNetCore.EnsureRunning.Enum;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace PeterKottas.DotNetCore.EnsureRunning.SqlServer
@@ -23,9 +18,7 @@ namespace PeterKottas.DotNetCore.EnsureRunning.SqlServer
         private SqlServerConfig config;
         private IDbConnection sqlConnection;
         private bool isConnected;
-        private object lockObj = new Object();
-        private string UniqueInstanceId = string.Format("MN:{0}PID:{1}", Environment.MachineName, Process.GetCurrentProcess().Id);
-        private int CurrentVersion = 1;
+        private object lockObj = new { };
 
         public SqlServerStorage(string connectionString, SqlServerConfig config)
         {
@@ -35,41 +28,47 @@ namespace PeterKottas.DotNetCore.EnsureRunning.SqlServer
             isConnected = false;
         }
 
-        private void Uninstall()
+        private void RunBatches(string sql)
         {
             string pattern = "[\\s](?i)GO(?-i)";
             var matcher = new Regex(pattern, RegexOptions.Compiled);
             int start = 0;
             int end = 0;
-            Match batch = matcher.Match(SqlServerSetup.UninstalSql);
-            while (batch.Success)
+            Match batch = matcher.Match(sql);
+            if (!batch.Success)
             {
-                end = batch.Index;
-                string batchQuery = SqlServerSetup.UninstalSql.Substring(start, end - start).Trim();
-                //execute the batch
-                sqlConnection.Execute(batchQuery);
-                start = end + batch.Length;
-                batch = matcher.Match(SqlServerSetup.UninstalSql, start);
+                sqlConnection.Execute(sql);
             }
-            //sqlConnection.Execute(SqlServerSetup.UninstalSql);
+            else
+            {
+                while (batch.Success)
+                {
+                    end = batch.Index;
+                    string batchQuery = sql.Substring(start, end - start).Trim();
+                    //execute the batch
+                    sqlConnection.Execute(batchQuery);
+                    start = end + batch.Length;
+                    batch = matcher.Match(sql, start);
+                }
+            }
+        }
+
+        private void Uninstall()
+        {
+            Console.WriteLine("uninstall");
+            RunBatches(SqlServerSetup.UninstalSql);
         }
 
         private void Install()
         {
-            string pattern = "[\\s](?i)GO(?-i)";
-            var matcher = new Regex(pattern, RegexOptions.Compiled);
-            int start = 0;
-            int end = 0;
-            Match batch = matcher.Match(SqlServerSetup.InstalSql);
-            while (batch.Success)
-            {
-                end = batch.Index;
-                string batchQuery = SqlServerSetup.InstalSql.Substring(start, end - start).Trim();
-                //execute the batch
-                sqlConnection.Execute(batchQuery);
-                start = end + batch.Length;
-                batch = matcher.Match(SqlServerSetup.InstalSql, start);
-            }
+            Console.WriteLine("install");
+            RunBatches(SqlServerSetup.InstalSql);
+        }
+
+        private void Reinstall()
+        {
+            Uninstall();
+            Install();
         }
 
         public ConnectResponseDTO Connect()
@@ -77,12 +76,15 @@ namespace PeterKottas.DotNetCore.EnsureRunning.SqlServer
             sqlConnection.Open();
             try
             {
-                var dbVersion = sqlConnection.QueryFirst<int>("select * from versions");
+                var dbVersion = sqlConnection.QueryFirst<int>("select * from version");
+                if (dbVersion < SqlServerSetup.CurrentVersion)
+                {
+                    Reinstall();
+                }
             }
             catch (Exception e)
             {
-                Uninstall();
-                Install();
+                Reinstall();
             }
             isConnected = true;
             return new ConnectResponseDTO();

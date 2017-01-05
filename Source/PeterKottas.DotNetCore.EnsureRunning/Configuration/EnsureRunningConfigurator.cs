@@ -1,20 +1,28 @@
 ﻿using PeterKottas.DotNetCore.EnsureRunning.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.EnsureRunning.Configuration
 {
+    /// <summary>
+    /// EnsureRunning configurator
+    /// </summary>
     public class EnsureRunningConfigurator
     {
         private EnsureRunningConfig config;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="config"></param>
         public EnsureRunningConfigurator(EnsureRunningConfig config)
         {
             this.config = config;
         }
 
+        /// <summary>
+        /// Use this method to assign new storage to EnsureRunning
+        /// </summary>
+        /// <param name="storage"></param>
         public void UseStorage(IStorage storage)
         {
             if (config == null)

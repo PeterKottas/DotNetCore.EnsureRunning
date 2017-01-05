@@ -1,27 +1,40 @@
-﻿using Enum;
+﻿using PeterKottas.DotNetCore.EnsureRunning.Enum;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.EnsureRunning
 {
     public class ActionState
     {
+        /// <summary>
+        /// Action execution counter
+        /// </summary>
         public readonly int Counter;
 
-        public readonly int RetryCount;
-
+        /// <summary>
+        /// Last action status
+        /// </summary>
         public readonly ActionStateStatusEnum LastActionStatus;
 
+        /// <summary>
+        /// Last action exception
+        /// </summary>
         public readonly Exception LastActionException;
 
+        /// <summary>
+        /// Last on exception exception
+        /// </summary>
         public readonly Exception LastOnExceptionException;
 
-        public ActionState(int counter, int retryCount, ActionStateStatusEnum lastActionStatus, Exception lastActionException = null, Exception lastOnExceptionException = null)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="counter"></param>
+        /// <param name="lastActionStatus"></param>
+        /// <param name="lastActionException"></param>
+        /// <param name="lastOnExceptionException"></param>
+        public ActionState(int counter, ActionStateStatusEnum lastActionStatus, Exception lastActionException = null, Exception lastOnExceptionException = null)
         {
             Counter = counter;
-            RetryCount = retryCount;
             LastActionStatus = lastActionStatus;
             LastActionException = lastActionException;
             LastOnExceptionException = lastOnExceptionException;

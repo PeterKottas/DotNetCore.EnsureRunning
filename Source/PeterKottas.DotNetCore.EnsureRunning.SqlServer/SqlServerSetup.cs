@@ -2,7 +2,9 @@
 {
     public static class SqlServerSetup
     {
-        public const string InstalSql = @"
+        public static int CurrentVersion = 1;
+
+        public static string InstalSql = $@"
 			CREATE TABLE Actions(
 			   Id INT IDENTITY(1,1) NOT NULL,
 			   ActionId VARCHAR (40) NOT NULL,
@@ -21,9 +23,9 @@
 			   Value   INT NOT NULL
 			);
 
-			INSERT INTO Version (Value) Values(1);";
+			INSERT INTO Version (Value) Values({CurrentVersion});";
 
-        public const string UninstalSql = @"
+        public static string UninstalSql = @"
 			DECLARE @Sql NVARCHAR(500) DECLARE @Cursor CURSOR
 
             SET @Cursor = CURSOR FAST_FORWARD FOR

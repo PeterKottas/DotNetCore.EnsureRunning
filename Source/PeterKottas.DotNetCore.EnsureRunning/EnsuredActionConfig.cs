@@ -1,8 +1,5 @@
 ﻿using PeterKottas.DotNetCore.EnsureRunning.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.EnsureRunning
 {
@@ -17,9 +14,10 @@ namespace PeterKottas.DotNetCore.EnsureRunning
             Storage = null;
             OnExceptionExceptionBehaviour = new AfterActionConfig();
             StorageCheckIntervalMs = 6000;
-            BetweenActionsIntervalMs = 1000;
+            BetweenActionsIntervalMs = 0;
             HeartBeatIntervalMs = 3000;
             HeartBeatTimeoutMs = HeartBeatIntervalMs * 3;
+            ShowDebug = false;
         }
 
         public int NumberOfTimes { get; set; }
@@ -41,5 +39,7 @@ namespace PeterKottas.DotNetCore.EnsureRunning
         public int HeartBeatTimeoutMs { get; set; }
 
         public int BetweenActionsIntervalMs { get; set; }
+
+        public bool ShowDebug { get; set; }
     }
 }

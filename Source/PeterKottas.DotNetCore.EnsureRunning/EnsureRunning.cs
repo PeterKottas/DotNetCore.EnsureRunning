@@ -1,9 +1,6 @@
 ﻿using PeterKottas.DotNetCore.EnsureRunning.Configuration;
 using PeterKottas.DotNetCore.EnsureRunning.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.EnsureRunning
 {

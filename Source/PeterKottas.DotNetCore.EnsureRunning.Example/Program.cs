@@ -1,9 +1,6 @@
-﻿using Enum;
+﻿using PeterKottas.DotNetCore.EnsureRunning.Enum;
 using PeterKottas.DotNetCore.EnsureRunning.SqlServer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.EnsureRunning.Example
 {
@@ -18,11 +15,8 @@ namespace PeterKottas.DotNetCore.EnsureRunning.Example
             EnsureRunning.Action("hello-world-action", (state) =>
             {
                 Console.WriteLine("Hello world action\nCounter:{0}", state.Counter);
-                return new AfterActionConfig()
-                {
-                    AfterActionBehaviour = AfterActionBehaviourEnum.RunAgain
-                };
-            }).Times(2).WithHeartBeatInterval(1000).WithBetweenActionDelay(1000).WithStorageCheckInterval(2000).Run();
+                return new AfterActionConfig();
+            }).WithDebugInfo().Times(2).WithHeartBeatInterval(1000).WithStorageCheckInterval(2000).Run();
         }
     }
 }

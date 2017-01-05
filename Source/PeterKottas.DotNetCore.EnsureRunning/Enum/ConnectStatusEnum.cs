@@ -1,4 +1,4 @@
-﻿namespace Enum
+﻿namespace PeterKottas.DotNetCore.EnsureRunning.Enum
 {
     public enum ConnectStatusEnum
     {
